@@ -2,16 +2,15 @@ const express = require('express')
 const MongoClient = require('mongodb').MongoClient;
 const bodyParser = require('body-parser')
 const objectId = require('mongodb').ObjectID
-// const cors = require('cors')
+require('dotenv').config()
 
-const uri = "mongodb+srv://Mytodolist:rakib1234@cluster0.c4bol.mongodb.net/Mytodo-list?retryWrites=true&w=majority";
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.c4bol.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }))
-// app.use(cors())
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html')
@@ -72,4 +71,4 @@ client.connect(err => {
 
 
 
-app.listen(3000)
+app.listen(process.env.PORT || 3000)
