@@ -44,7 +44,7 @@
     </main>
     <script>
         function loadList() {
-            fetch('/list')
+            fetch('https://powerful-cliffs-15938.herokuapp.com/list')
                 .then(res => res.json())
                 .then(AllList => {
                     console.log(AllList)
@@ -66,7 +66,7 @@
         loadList()
 
         function deleteToDo (event,id){
-            fetch(`/delete/${id}`,{
+            fetch(`https://powerful-cliffs-15938.herokuapp.com/delete/${id}`,{
                 method :'DELETE'
             })
             .then(res =>res.json())
@@ -84,7 +84,7 @@
 
             const Todo = {name ,time ,workingTime}
             
-            fetch(`/update/${id}`,{
+            fetch(`https://powerful-cliffs-15938.herokuapp.com/update/${id}`,{
                 method :'PATCH',
                 headers:{
                     'Content-Type':'application/json'
@@ -103,7 +103,7 @@
 
         
         function updateToDo (id){
-            fetch(`/lists/${id}`)
+            fetch(`https://powerful-cliffs-15938.herokuapp.com/lists/${id}`)
             .then(res => res.json())
             .then(result =>{
                 const update = document.getElementById('update')
