@@ -49,13 +49,14 @@
                 .then(AllList => {
                     console.log(AllList)
                     const container = document.getElementById('list')
+                    container.innerHTML =''
                     AllList.forEach(list => {
                         const p = document.createElement('h5')
                         p.innerHTML = `Name :${list.name}
                 
                 Time : ${list.time} Working Time :${list.workingTime}
                 <button class="btn btn-success" onclick =updateToDo('${list._id}')>Update</button>
-                <button class="btn btn-danger" onclick =deleteToDo('${list._id}')>Delete</button>
+                <button class="btn btn-danger" onclick =deleteToDo(event,'${list._id}')>Delete</button>
 
                 `
                         container.appendChild(p)
@@ -64,14 +65,40 @@
         }
         loadList()
 
-        function deleteToDo (id){
+        function deleteToDo (event,id){
             fetch(`/delete/${id}`,{
                 method :'DELETE'
             })
             .then(res =>res.json())
             .then(result =>{
-                console.log('deleted Successfully')
+                if(result){
+                    event.target.parentNode.style.display ='none'
+                }
             })
+        }
+
+        function updateProduct(id){
+            const name = document.getElementById('name').value
+            const time = document.getElementById('time').value
+            const workingTime = document.getElementById('workingTime').value
+
+            const Todo = {name ,time ,workingTime}
+            
+            fetch(`/update/${id}`,{
+                method :'PATCH',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify(Todo)
+            })
+            .then(res =>res.json())
+            .then(result =>{
+                if(result){
+                    loadList()
+                    document.getElementById('update').innerHTML ='' 
+                }
+            })
+
         }
 
         
@@ -83,9 +110,9 @@
                 update.innerHTML = `
                     
                     Name : <input type="text" value ="${result.name}" id="name">
-                    time : <input type="text" value ="${result.time}" id="name">
-                    Working Time : <input type="text" value ="${result.workingTime}" id="name">
-                    <button class="btn btn-success" type="submit">Submit</button>
+                    time : <input type="text" value ="${result.time}" id="time">
+                    Working Time : <input type="text" value ="${result.workingTime}" id="workingTime">
+                    <button onClick ="updateProduct('${result._id}')" class="btn btn-success">Submit</button>
                 `
             })
         }

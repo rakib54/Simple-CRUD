@@ -32,9 +32,19 @@ client.connect(err => {
     app.get('/lists/:id', (req, res) => {
         collection.find({ _id: objectId(req.params.id) })
             .toArray((err, documents) => {
-                 res.send(documents[0]);
+                res.send(documents[0]);
             })
-        
+
+    })
+
+    app.patch('/update/:id', (req, res) => {
+        collection.updateOne({ _id: objectId(req.params.id) },
+            {
+                $set: { name: req.body.name, time: req.body.time, workingTime: req.body.workingTime }
+            })
+            .then(result => {
+                res.send(result.modifiedCount > 0)
+            })
     })
 
 
@@ -44,14 +54,14 @@ client.connect(err => {
         collection.insertOne(product)
             .then(result => {
                 console.log('data added');
-                res.send('Successfully added')
+                res.redirect('/')
             })
     })
 
     app.delete('/delete/:id', (req, res) => {
         collection.deleteOne({ _id: objectId(req.params.id) })
             .then(result => {
-                console.log(result);
+                res.send(result.deletedCount > 0)
             })
     })
 
